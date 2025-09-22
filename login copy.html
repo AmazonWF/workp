@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache" />
+  <meta http-equiv="expires" content="-1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Internet Hotspot - Log in</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body style="margin:0; padding:0; height:100%; width:100%; overflow-x:hidden;">
+
+  <!-- Background video -->
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="back.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Hidden CHAP form -->
+  $(if chap-id)
+  <form name="sendin" action="$(link-login-only)" method="post" style="display:none">
+    <input type="hidden" name="username" />
+    <input type="hidden" name="password" />
+    <input type="hidden" name="dst" value="https://www.facebook.com/JMJFITS" />
+    <input type="hidden" name="popup" value="true" />
+  </form>
+
+  <script src="/md5.js"></script>
+  <script>
+    function doLogin() {
+      document.sendin.username.value = "admin";
+      document.sendin.password.value = hexMD5('$(chap-id)' + "" + '$(chap-challenge)');
+      document.sendin.submit();
+      return false;
+    }
+  </script>
+  $(endif)
+
+  <script>
+    function toggleConnect() {
+      const cb = document.getElementById("agree");
+      const btn = document.getElementById("connectBtn");
+      const msg = document.getElementById("wifiMessage");
+      btn.disabled = !cb.checked;
+      msg.style.display = cb.checked ? "block" : "none";
+    }
+
+    function redirectToStatus() {
+      setTimeout(() => {
+        window.location.href = "https://www.facebook.com/JMJFITS";
+      }, 1000); // redirect after login
+      return true;
+    }
+  </script>
+
+  <!-- Logos at top -->
+  <div class="top-edge">
+    <img src="6.png" alt="Left Logo" class="edge-img left">
+    <img src="9.jpg" alt="Right Logo" class="edge-img right">
+  </div>
+
+  <div class="container">
+    <div class="banner">
+      <h1></h1>
+    </div>
+
+    <!-- Logo animations -->
+    <div class="logo-video-container">
+      <div class="logo-video">
+        <video autoplay muted loop playsinline>
+          <source src="logo.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="logo-video">
+        <video autoplay muted loop playsinline>
+          <source src="dito.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <!-- Login Box -->
+    <div class="login-box">
+      <form name="login" action="$(link-login-only)" method="post"
+        $(if chap-id) onSubmit="return doLogin()" $(endif) onsubmit="return redirectToStatus()">
+        <input type="hidden" name="dst" value="https://www.facebook.com/JMJFITS" />
+        <input type="hidden" name="popup" value="true" />
+
+        <h2>Welcome To Balilihan Food Bazaar</h2>
+        <p>Please check agreement and connect</p>
+
+        <label style="color:#bbb; font-size:0.95rem;">
+          <input type="checkbox" id="agree" onclick="toggleConnect()"> I agree to the terms
+        </label>
+
+        <div id="wifiMessage"
+          style="display:none; margin-top:10px; color:#00ffcc; font-size:0.95rem; font-weight:500;">
+          🎉 Thank you for connecting with us! Enjoy <strong>2 hours of FREE WiFi</strong>.<br>
+          We hope you have a pleasant browsing experience. 😊
+        </div>
+
+        <input type="submit" id="connectBtn" value="Connect" disabled />
+      </form>
+    </div>
+
+    <div class="powered">Powered by MJS FIBER I.T SOLUTIONS</div>
+  </div>
+</body>
+
+</html>
